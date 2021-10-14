@@ -2,36 +2,61 @@ import json
 import plotly
 import pandas as pd
 
+
+import re
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+from nltk.stem.porter import PorterStemmer
+
 
 from flask import Flask
-from flask import render_template, request, jsonify
-from plotly.graph_objs import Bar
-from sklearn.externals import joblib
+from flask import render_template, request
+from plotly.graph_objs import Bar, Pie
+import joblib
 from sqlalchemy import create_engine
 
 
 app = Flask(__name__)
 
 def tokenize(text):
+    """
+        This function will normalize, removed stop words, stemmed and lemmatized.
+        Returns tokenized text
+    """
+
+    # Normalize text
+    text = re.sub(r"[^a-zA-Z0-9]", " ", text.lower())
+
+    # Tokenize text
     tokens = word_tokenize(text)
+
+    # Remove stop words
+    tokens = [t for t in tokens if t not in stopwords.words("english")]
+
+    # Lemmatization
     lemmatizer = WordNetLemmatizer()
+    # reduce words to their root form using default pos
+    tokens = [lemmatizer.lemmatize(t) for t in tokens]
+    # lemmatize verbs by specifying pos
+    tokens = [lemmatizer.lemmatize(t, pos='v') for t in tokens]
+    # lemmatize verbs by specifying pos
+    tokens = [lemmatizer.lemmatize(t, pos='a') for t in tokens]
 
-    clean_tokens = []
-    for tok in tokens:
-        clean_tok = lemmatizer.lemmatize(tok).lower().strip()
-        clean_tokens.append(clean_tok)
+    # Stemming
+    tokens = [PorterStemmer().stem(t) for t in tokens]
 
-    return clean_tokens
+    # drop duplicates
+    tokens = pd.Series(tokens, dtype='object').drop_duplicates().tolist()
+
+    return tokens
 
 # load data
-engine = create_engine('sqlite:///../data/YourDatabaseName.db')
-df = pd.read_sql_table('YourTableName', engine)
+engine = create_engine('sqlite:///DisasterResponse.db')
+df = pd.read_sql_table('DisasterResponse', engine)
 
 # load model
-model = joblib.load("../models/your_model_name.pkl")
-
+model = joblib.load(r"classifier_v1.pkl")
 
 # index webpage displays cool visuals and receives user input text for model
 @app.route('/')
@@ -39,18 +64,20 @@ model = joblib.load("../models/your_model_name.pkl")
 def index():
     
     # extract data needed for visuals
-    # TODO: Below is an example - modify to extract data for your own visuals
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
+
+    catergory_df = df.drop(columns=['id', 'message', 'genre'])
+    catergory_counts = list(catergory_df.sum().sort_values(ascending=False).values)
+    catergory_names = list(catergory_df.sum().sort_values(ascending=False).index)
     
     # create visuals
-    # TODO: Below is an example - modify to create your own visuals
     graphs = [
         {
             'data': [
-                Bar(
-                    x=genre_names,
-                    y=genre_counts
+                Pie(
+                    labels=genre_names,
+                    values=genre_counts
                 )
             ],
 
@@ -61,6 +88,27 @@ def index():
                 },
                 'xaxis': {
                     'title': "Genre"
+                }
+            }
+        },
+        {
+            'data': [
+                Bar(
+                    x=catergory_names,
+                    y=catergory_counts
+                )
+            ],
+
+            'layout': {
+                'title': 'Distribution of Message Catergories',
+                'yaxis': {
+                    'title': "Count"
+                },
+                'xaxis': {
+                    'title': "Catergories"
+                },
+                'xticks': {
+                    'rotation': 45
                 }
             }
         }
