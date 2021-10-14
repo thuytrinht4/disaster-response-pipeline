@@ -14,7 +14,7 @@ in several categories. The web app will also display visualizations of the data.
 Link to the webapp: [To-be-update: Link after deployment]()
 
 Below are a few screenshots of the web app.
-![Fig1](images/disaster-response-project_webapp1.PNG)
+![Fig1](images/disaster-response-project_webapp1.png)
 
 ![Fig2](images/distribution_by_genres.PNG)
 
