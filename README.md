@@ -14,9 +14,9 @@ in several categories. The web app will also display visualizations of the data.
 Link to the webapp: [To-be-update: Link after deployment]()
 
 Below are a few screenshots of the web app.
-![disaster-response-project_webapp1](disaster-response-project_webapp1.png)
+![disaster-response-project_webapp1](images/disaster-response-project_webapp1.png)
 
-![disaster-response-project_webapp2](disaster-response-project_webapp2.png)
+![disaster-response-project_webapp2](images/disaster-response-project_webapp2.png)
 
 ## Installation
 This project requires Python 3.x and others libraries included in the `requirements.txt` file.
