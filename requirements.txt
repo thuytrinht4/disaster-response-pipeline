@@ -24,6 +24,7 @@ entrypoints==0.3
 Flask==2.0.2
 fonttools==4.25.0
 greenlet==1.1.2
+gunicorn==20.1.0
 html5lib==1.1
 idna @ file:///tmp/build/80754af9/idna_1622654382723/work
 importlib-metadata @ file:///C:/ci/importlib-metadata_1631916826748/work
