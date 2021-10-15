@@ -42,7 +42,7 @@ run commands in the following sequence:
  
 
     python setup.py install
-    python models/train/train_classifier.py data/DisasterResponse.db models/results/classifier.pkl
+    python models/train_classifier.py data/DisasterResponse.db models/classifier.pkl
 
 
  + Launch webapp:
@@ -99,14 +99,12 @@ Here's the file structure of the project:
         |- process_data.py       # etl pipeline
         |- DisasterResponse.db   # database to save clean data to
 
-        - models
-        |- model_identity      # ML pipeline
-        | |- build_pipeline.py     # all steps in the pipeline 
-        | |- custom_transformer.py     # classes for transformer used in pipeline 
-        |- train      
-        | |- train_classifier.py     # train and evaluate models
-        |- result      
-        | |- classifier.pkl  # saved model
+        - models 
+        |- train_classifier.py     # build, train and evaluate ML pipeline 
+        |- classifier.pkl  # saved model
+
+        - utils
+        |- custom_transformer.py      # classes for transformer used in pipeline 
 
         - ETL_Pipeline_Preparation.ipynb # notebook file of Project Workspace - ETL
         - ML_Pipeline_Preparation.ipynb # notebook file of Project Workspace - Machine Learning Pipeline.
