@@ -41,6 +41,7 @@ run commands in the following sequence:
  + Build ML pipeline: Build, Train, Test, Tune and Save models:
  
 
+    python setup.py install
     python models/train/train_classifier.py data/DisasterResponse.db models/results/classifier.pkl
 
 
