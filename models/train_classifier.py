@@ -1,21 +1,10 @@
 import sys
 import pandas as pd
-import re
 from sqlalchemy.engine import create_engine
 from sklearn.model_selection import train_test_split
-from sklearn.pipeline import Pipeline, FeatureUnion
-from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
-from sklearn.multioutput import MultiOutputClassifier
-from sklearn.ensemble import RandomForestClassifier
-from custom_transformer import StartingVerbExtractor
-from sklearn.svm import LinearSVC
-from nltk import word_tokenize
-from nltk.corpus import stopwords
-from nltk.stem import WordNetLemmatizer
-from nltk.stem.porter import PorterStemmer
-from sklearn.model_selection import GridSearchCV
+from utils.custom_transformer import Tokenizer, build_pipeline
 from sklearn.metrics import precision_score, recall_score, accuracy_score, f1_score
-import pickle
+import joblib
 
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
@@ -43,61 +32,6 @@ def load_data(database_filepath):
 
     return X, y, category_names
 
-
-def tokenize(text):
-    """
-        This function will normalize, removed stop words, stemmed and lemmatized.
-        Returns tokenized text
-    """
-
-    # Normalize text
-    text = re.sub(r"[^a-zA-Z0-9]", " ", text.lower())
-
-    # Tokenize text
-    tokens = word_tokenize(text)
-
-    # Remove stop words
-    tokens = [t for t in tokens if t not in stopwords.words("english")]
-
-    # Lemmatization
-    lemmatizer = WordNetLemmatizer()
-    # reduce words to their root form using default pos
-    tokens = [lemmatizer.lemmatize(t) for t in tokens]
-    # lemmatize verbs by specifying pos
-    tokens = [lemmatizer.lemmatize(t, pos='v') for t in tokens]
-    # lemmatize verbs by specifying pos
-    tokens = [lemmatizer.lemmatize(t, pos='a') for t in tokens]
-
-    # Stemming
-    tokens = [PorterStemmer().stem(t) for t in tokens]
-
-    # drop duplicates
-    tokens = pd.Series(tokens, dtype='object').drop_duplicates().tolist()
-
-    return tokens
-
-
-def build_model():
-    """
-        This function will set up a pipeline which prepare for training model
-    """
-
-    pipeline = Pipeline(
-        [('features', FeatureUnion([('text_pipeline', Pipeline([('vect', CountVectorizer(tokenizer=tokenize)),
-                                                                ('tfidf', TfidfTransformer())])),
-                                    ('starting_verb', StartingVerbExtractor())])),
-         ('clf', MultiOutputClassifier(LinearSVC()))])
-
-    parameters = {'features__text_pipeline__vect__max_df': (0.5, 0.75, 1.0),
-                  'features__text_pipeline__tfidf__use_idf': (True, False),
-                  'features__transformer_weights': (
-                        {'text_pipeline': 1, 'starting_verb': 0.5})
-                  }
-    cv = GridSearchCV(pipeline, param_grid=parameters)
-
-    return cv
-
-
 def evaluate_model(model, X_test, Y_test, category_names):
     """
         This function will print out the information of accuracy, precision, recall scores of 36 categories
@@ -112,11 +46,10 @@ def evaluate_model(model, X_test, Y_test, category_names):
               '\t % F1_score : \t', f1_score(Y_test[:, k], y_pred[:, k])
               )
 
-
 def save_model(model, model_filepath):
     """ Save model's best_estimator_ using pickle"""
-    pickle.dump(model.best_estimator_, open(model_filepath, 'wb'))
-
+    # pickle.dump(model.best_estimator_, open(model_filepath, 'wb'))
+    joblib.dump(model, open(model_filepath, 'wb'))
 
 def main():
     import time
@@ -128,16 +61,17 @@ def main():
         X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.33)
 
         print('Building model...')
-        model = build_model()
+        model = build_pipeline()
 
         print('Training model...')
         start_time = time.time()
+        print(f"--- Start time: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(start_time))} ---")
         model.fit(X_train, Y_train)
         train_time = time.time() - start_time
-        print("--- Traing time: %s minutes ---" % (train_time/60))
-
-        print('Evaluating model...')
-        evaluate_model(model, X_test, Y_test, category_names)
+        print("--- Training time: %s minutes ---" % (train_time/60))
+        #
+        # print('Evaluating model...')
+        # evaluate_model(model, X_test, Y_test, category_names)
 
         print('Saving model...\n    MODEL: {}'.format(model_filepath))
         save_model(model, model_filepath)

@@ -2,65 +2,28 @@ import json
 import plotly
 import pandas as pd
 
-
-import re
-from nltk.stem import WordNetLemmatizer
-from nltk.tokenize import word_tokenize
-from nltk.corpus import stopwords
-from nltk.stem.porter import PorterStemmer
-
-
 from flask import Flask
 from flask import render_template, request
 from plotly.graph_objs import Bar, Pie
 import joblib
 from sqlalchemy import create_engine
+from utils.custom_transformer import Tokenizer, StartingVerbExtractor, build_pipeline
 
 
 app = Flask(__name__)
 
-def tokenize(text):
-    """
-        This function will normalize, removed stop words, stemmed and lemmatized.
-        Returns tokenized text
-    """
-
-    # Normalize text
-    text = re.sub(r"[^a-zA-Z0-9]", " ", text.lower())
-
-    # Tokenize text
-    tokens = word_tokenize(text)
-
-    # Remove stop words
-    tokens = [t for t in tokens if t not in stopwords.words("english")]
-
-    # Lemmatization
-    lemmatizer = WordNetLemmatizer()
-    # reduce words to their root form using default pos
-    tokens = [lemmatizer.lemmatize(t) for t in tokens]
-    # lemmatize verbs by specifying pos
-    tokens = [lemmatizer.lemmatize(t, pos='v') for t in tokens]
-    # lemmatize verbs by specifying pos
-    tokens = [lemmatizer.lemmatize(t, pos='a') for t in tokens]
-
-    # Stemming
-    tokens = [PorterStemmer().stem(t) for t in tokens]
-
-    # drop duplicates
-    tokens = pd.Series(tokens, dtype='object').drop_duplicates().tolist()
-
-    return tokens
+# load model
+model = joblib.load("models/classifier.pkl")
 
 # load data
-engine = create_engine('sqlite:///DisasterResponse.db')
+engine = create_engine('sqlite:///data/DisasterResponse.db')
 df = pd.read_sql_table('DisasterResponse', engine)
 
-# load model
-model = joblib.load(r"classifier_v1.pkl")
 
 # index webpage displays cool visuals and receives user input text for model
 @app.route('/')
 @app.route('/index')
+
 def index():
     
     # extract data needed for visuals
@@ -142,6 +105,7 @@ def go():
 
 def main():
     app.run(host='0.0.0.0', port=3001, debug=True)
+    # pass
 
 
 if __name__ == '__main__':
