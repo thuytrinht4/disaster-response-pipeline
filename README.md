@@ -3,15 +3,16 @@
 In this project, we'll apply data engineering skills to analyze disaster data from [Figure Eight](https://www.figure-eight.com/) t
 o build a model for an API that classifies disaster messages.
 
-**Data**: we're provided a data set containing real messages that were sent during disaster events. 
+**Data**: two datasets downloaded from Figure Eight:
+1. `data/DisasterMessages.csv`: real messages that were sent during disaster events 
+2. `data/DisasterCategories.csv`: lables of which categories each of the message belong to.
 
 **Output**: 
 1. a machine learning pipeline to categorize these events so that we can send the messages to 
 an appropriate disaster relief agency.
 
 2. a web app where an emergency worker can input a new message and get classification results 
-in several categories. The web app will also display visualizations of the data. 
-Link to the webapp: [To-be-update: Link after deployment]()
+in several categories. The web app will also display visualizations of the data.
 
 Below are a few screenshots of the web app.
 ![Fig1](images/webapp1.PNG)
@@ -55,7 +56,7 @@ run commands in the following sequence:
 There are three components of this project.
 
 ### 1. ETL Pipeline
-In a Python script, `process_data.py`, write a data cleaning pipeline that:
+A Python script, `process_data.py`, contains data cleaning pipeline that:
 + Loads the `messages` and `categories` datasets
 + Tranform the two sets:
   + Merges the two datasets
@@ -63,7 +64,7 @@ In a Python script, `process_data.py`, write a data cleaning pipeline that:
 + Stores the clean dataset a SQLite database
 
 ### 2. ML Pipeline
-In a Python script, `train_classifier.py`, write a machine learning pipeline that:
+A Python script, `train_classifier.py`, contains machine learning pipeline that:
 + Loads data from the SQLite database
 + Splits the dataset into training and test sets
 + Builds a text processing and machine learning pipeline
@@ -75,8 +76,7 @@ In a Python script, `train_classifier.py`, write a machine learning pipeline tha
 A Python script, `run.py` file is written for flask web app deployment
 
 + Modify file paths for database and model as needed
-+ Add data visualizations using Plotly in the web app. 
-+ Wrap the webapp and deploy into Heroku server.
++ Add data visualizations using Plotly in the web app.
 
 
 # Project Structure
@@ -91,11 +91,12 @@ Here's the file structure of the project:
         - data
         |- DisasterCategories.csv  # data to process 
         |- DisasterMessages.csv  # data to process
-        |- process_data.py
+        |- process_data.py       # etl pipeline
         |- DisasterResponse.db   # database to save clean data to
 
         - models
-        |- train_classifier.py
+        |- train_classifier.py   # ML pipeline
+        |- custom_transformer.py     # custom transformer for Scikit-pipeline 
         |- classifier.pkl  # saved model 
 
         - ETL_Pipeline_Preparation.ipynb # notebook file of Project Workspace - ETL
