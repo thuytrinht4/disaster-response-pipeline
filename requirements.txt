@@ -1,6 +1,6 @@
 click==8.0.3
 colorama==0.4.4
-disaster-response==1.0
+git+git://github.com/thuytrinht4/disaster-response-pipeline
 Flask==2.0.2
 greenlet==1.1.2
 gunicorn==20.1.0
