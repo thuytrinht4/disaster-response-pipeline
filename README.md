@@ -41,12 +41,13 @@ run commands in the following sequence:
  + Build ML pipeline: Build, Train, Test, Tune and Save models:
  
 
-    python models/train_classifier.py data/DisasterResponse.db models/classifier.pkl
+    python models/train/train_classifier.py data/DisasterResponse.db models/results/classifier.pkl
+
 
  + Launch webapp:
 
 
-    python app/run.py
+    python app/run_local.py
 
  Local host [http://localhost:3001](http://localhost:3001) should be opened up in your browser.
  
