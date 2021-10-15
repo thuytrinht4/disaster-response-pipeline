@@ -75,7 +75,7 @@ A Python script, `train_classifier.py`, contains machine learning pipeline that:
 ### 3. Flask Web App
 A Python script, `run.py` file is written for flask web app deployment
 
-+ Modify file paths for database and model as needed
++ Specify file paths for database and model used for testing.
 + Add data visualizations using Plotly in the web app.
 
 
