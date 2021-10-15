@@ -1,7 +1,7 @@
 # Disaster Responses Pipeline
 ## Project Overview
-In this project, we'll apply data engineering skills to analyze disaster data from [Figure Eight](https://www.figure-eight.com/) t
-o build a model for an API that classifies disaster messages.
+This project aims to build machine learning pipeline to process, analyze data from [Figure Eight](https://www.figure-eight.com/)
+that classifies disaster messages into the correct response categories.
 
 **Data**: two datasets downloaded from Figure Eight:
 1. `data/DisasterMessages.csv`: real messages that were sent during disaster events 
