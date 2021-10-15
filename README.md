@@ -81,6 +81,7 @@ A Python script, `run.py` file is written for flask web app deployment
 
 + Specify file paths for database and model used for testing.
 + Add data visualizations using Plotly in the web app.
++ Deploy folder `app/` on Heroku
 
 
 # Project Structure
@@ -99,10 +100,16 @@ Here's the file structure of the project:
         |- DisasterResponse.db   # database to save clean data to
 
         - models
-        |- train_classifier.py   # ML pipeline
-        |- custom_transformer.py     # custom transformer for Scikit-pipeline 
-        |- classifier.pkl  # saved model 
+        |- model_identity      # ML pipeline
+        | |- build_pipeline.py     # all steps in the pipeline 
+        | |- custom_transformer.py     # classes for transformer used in pipeline 
+        |- train      
+        | |- train_classifier.py     # train and evaluate models
+        |- result      
+        | |- classifier.pkl  # saved model
 
         - ETL_Pipeline_Preparation.ipynb # notebook file of Project Workspace - ETL
         - ML_Pipeline_Preparation.ipynb # notebook file of Project Workspace - Machine Learning Pipeline.
         - README.md
+        - requirements.txt   # all packages needed for the project
+        - setup.py      # initialize and install project
