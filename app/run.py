@@ -7,13 +7,13 @@ from flask import render_template, request
 from plotly.graph_objs import Bar, Pie
 import joblib
 from sqlalchemy import create_engine
-from utils.custom_transformer import Tokenizer, StartingVerbExtractor, build_pipeline
-
+from models.model_identity.custom_transformer import Tokenizer, StartingVerbExtractor
 
 app = Flask(__name__)
 
 # load model
-model = joblib.load("models/classifier.pkl")
+# # for server run
+model = joblib.load("data/classifier.pkl")
 
 # load data
 engine = create_engine('sqlite:///data/DisasterResponse.db')
@@ -104,8 +104,8 @@ def go():
 
 
 def main():
-    app.run(host='0.0.0.0', port=3001, debug=True)
-    # pass
+    # app.run(host='0.0.0.0', port=3001, debug=True)
+    pass
 
 
 if __name__ == '__main__':
