@@ -60,7 +60,7 @@ A Python script, `process_data.py`, contains data cleaning pipeline that:
 + Loads the `messages` and `categories` datasets
 + Tranform the two sets:
   + Merges the two datasets
-  + Cleans the data
+  + Cleans the data: transform categories into On-hot Encoding style, remove redundant class with only Zero values or contain values of Two.
 + Stores the clean dataset a SQLite database
 
 ### 2. ML Pipeline
