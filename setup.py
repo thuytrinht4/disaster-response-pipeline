@@ -6,5 +6,5 @@ setup(name='disaster-response',
       author='Thuy Trinh',
       author_email='thuytrinht4@gmail.com',
       url='https://github.com/thuytrinht4/disaster-response-pipeline',
-      packages=['models', 'utils'],
+      packages=['models'],
      )
