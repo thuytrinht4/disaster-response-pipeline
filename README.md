@@ -70,7 +70,11 @@ A Python script, `process_data.py`, contains data cleaning pipeline that:
 A Python script, `train_classifier.py`, contains machine learning pipeline that:
 + Loads data from the SQLite database
 + Splits the dataset into training and test sets
-+ Builds a text processing and machine learning pipeline
++ Builds a text processing and machine learning pipeline:
+  + text processing is defined in `utils/custom_tranformer.py`, with two classes: `Tokenizer` and `StartVerbExtractor`
+  + machine learning pipeline is defined in `models/train_classifier.py`, with function: `build_pipeline()`
+  + Note: text processing and machine learning pipeline build are separate into two modules to prevent ***Leaky Pipe** 
+  issue when saving model and loading model in two different files. Refer more about this issue [here](https://rebeccabilbro.github.io/module-main-has-no-attribute/)
 + Trains and tunes a model using GridSearchCV
 + Outputs results on the test set
 + Exports the final model as a pickle file
