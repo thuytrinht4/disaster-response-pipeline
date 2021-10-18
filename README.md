@@ -114,3 +114,12 @@ Here's the file structure of the project:
         - README.md
         - requirements.txt   # all packages needed for the project
         - setup.py      # initialize and install project
+
+
+# Licensing, Authors, Acknowledgements
+This app was completed as part of the [Udacity Data Scientist Nanodegree](https://www.udacity.com/course/data-scientist-nanodegree--nd025).
+
+Main acknowledgements for this projects are:
++ [Udacity](https://www.udacity.com/) for providing code templates
++ [Figure Eight](https://www.figure-eight.com/) for providing original dataset and categories labels. 
+
